@@ -38,3 +38,4 @@ COPY .github/docker/supervisord.conf /etc/supervisord.conf
 EXPOSE 80 443
 ENTRYPOINT [ "/bin/ash", ".github/docker/entrypoint.sh" ]
 CMD [ "supervisord", "-n", "-c", "/etc/supervisord.conf" ]
+
