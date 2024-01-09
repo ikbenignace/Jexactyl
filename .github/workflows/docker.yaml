@@ -22,11 +22,18 @@ jobs:
       - name: Code checkout
         uses: actions/checkout@v3
 
+      - name: Log in to the Container registry
+        uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Docker metadata
         id: docker_meta
         uses: docker/metadata-action@v4
         with:
-          images: ghcr.io/ikbenignace/jexactyl
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           flavor: |
             latest=false
           tags: |
@@ -39,13 +46,6 @@ jobs:
 
       - name: Setup Docker buildx
         uses: docker/setup-buildx-action@v2
-
-      - name: Log in to the Container registry
-        uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
-        with:
-          registry: ${{ env.REGISTRY }}
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Update version
         if: "github.event_name == 'release' && github.event.action == 'published'"
